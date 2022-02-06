@@ -1,9 +1,9 @@
 <template>
   <div class="type-nav">
     <div class="container">
-      <div @mouseleave="leaveIndex">
-        <h2 class="all">全部商品分类</h2>
-        <div class="sort">
+      <div @mouseleave="leaveShow">
+        <h2 class="all" @mouseenter="enterShow">全部商品分类</h2>
+        <div class="sort" v-show="show">
           <!-- 事件委派 -->
           <div class="all-sort-list2" @click="goSearch">
             <div
@@ -75,10 +75,14 @@ export default {
   data() {
     return {
       curIndex: -1,
+      show: true,
     };
   },
   mounted() {
     this.$store.dispatch("categoryList");
+    if (this.$route.path != "/home") {
+        this.show = false;
+      }
   },
   computed: {
     ...mapState({
@@ -92,9 +96,6 @@ export default {
     changeIndex: throttle(function (index) {
       this.curIndex = index;
     }, 20),
-    leaveIndex() {
-      this.curIndex = -1;
-    },
     goSearch(event) {
       // 节点有一个 dataset 属性，可以获取节点的自定义属性与属性值
       let { categoryname, category1id, category2id, category3id } =
@@ -103,7 +104,7 @@ export default {
       if (categoryname) {
         let location = { name: "search" };
         let query = { categoryname: categoryname };
-        
+
         if (category1id) {
           query.category1id = category1id;
         } else if (category2id) {
@@ -114,6 +115,17 @@ export default {
 
         location.query = query;
         this.$router.push(location);
+      }
+    },
+    enterShow() {
+      if (this.$route.path != "/home") {
+        this.show = true;
+      }
+    },
+    leaveShow() {
+      this.curIndex = -1;
+      if (this.$route.path != "/home") {
+        this.show = false;
       }
     },
   },

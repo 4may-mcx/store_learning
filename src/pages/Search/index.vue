@@ -1,6 +1,7 @@
 <template>
   <div>
-    我是Search
+    <!-- 这里是 Search 组件 -->
+    <TypeNav></TypeNav>
   </div>
 </template>
 
@@ -10,6 +11,6 @@
   }
 </script>
 
-<style lang="scss" scoped>
+<style lang="less" scoped>
 
 </style>
