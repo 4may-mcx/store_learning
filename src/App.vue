@@ -20,7 +20,6 @@ export default {
   mounted() {
     // 调入一次可以使用多次
     this.$store.dispatch("getCategoryList");
-
   },
 };
 </script>

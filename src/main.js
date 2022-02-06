@@ -5,10 +5,12 @@ import router from '@/router'
 import store from '@/store'
 
 import TypeNav from "@/components/TypeNav"
+import Carsouel from "@/components/Carsouel"
 
-Vue.config.productionTip = false
+Vue.config.productionTip = false;
 // 注册全局组件
-Vue.component(TypeNav.name, TypeNav)
+Vue.component(TypeNav.name, TypeNav);
+Vue.component(Carsouel.name, Carsouel);
 
 // 引入 mockServe.js 并调用一次 （获取 mock 数据）
 import "@/mock/mockServe.js"
