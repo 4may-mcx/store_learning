@@ -56,7 +56,7 @@
 
 <script>
 import { mapState } from "vuex";
-
+import throttle from "lodash/throttle";
 export default {
   name: "TypeNav",
   data() {
@@ -75,9 +75,10 @@ export default {
     }),
   },
   methods: {
-    changeIndex(index) {
+    // 不能用箭头函数传入回调，不然 this 会指向 throttle，而不是等等调用它的 changeIndex()
+    changeIndex: throttle(function (index) {
       this.curIndex = index;
-    },
+    }, 20),
     leaveIndex() {
       this.curIndex = -1;
     },
