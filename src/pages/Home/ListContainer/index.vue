@@ -5,10 +5,10 @@
         <!--banner轮播-->
         <div class="swiper-container" id="mySwiper">
           <div class="swiper-wrapper">
-            <div class="swiper-slide">
-              <img src="./images/banner1.jpg" />
+            <!-- 轮播图本身 -->
+            <div class="swiper-slide" v-for="(carousel) in bannerList" :key="carousel.id">
+              <img :src="carousel.imgUrl" />
             </div>
-            
           </div>
           <!-- 如果需要分页器 -->
           <div class="swiper-pagination"></div>
@@ -92,8 +92,14 @@
 </template>
 
 <script>
+import { mapState } from "vuex";
 export default {
   name: "ListContainer",
+  computed: {
+    ...mapState({
+      bannerList: (state) => state.home.bannerList,
+    }),
+  },
   mounted () {
     this.$store.dispatch('bannerList');
   },
