@@ -11,12 +11,15 @@ export const reqCategoryList = () => {
         method: "GET"
     })
 }
-
 export const reqBannerList = () => {
-    // 发请求：axios返回的结果是Promise对象
-    // 一定要记得返回！！
     return mockRequests({
         url: '/banner',
+        method: "GET"
+    })
+}
+export const reqFloorList = () => {
+    return mockRequests({
+        url: '/floor',
         method: "GET"
     })
 }

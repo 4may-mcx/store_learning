@@ -5,10 +5,8 @@
     <Recommend></Recommend>
     <Rank></Rank>
     <Like></Like>
-    <Floor></Floor>
-    <Floor></Floor>
+    <Floor v-for="(floor) in floorList" :key="floor.id" :list="floor"></Floor>
     <Brand></Brand>
-    
   </div>
 </template>
 
@@ -20,6 +18,8 @@ import Like from "@/pages/Home/Like";
 import Floor from "@/pages/Home/Floor";
 import Brand from "@/pages/Home/Brand";
 
+import { mapState } from "vuex";
+
 export default {
   name: "Home",
   components: {
@@ -27,8 +27,17 @@ export default {
     Recommend,
     Rank,
     Like,
-    Floor,  
-    Brand
+    Floor,
+    Brand,
+  },
+  computed: {
+    ...mapState({
+      floorList: (state) => state.home.floorList,
+    }),
+  },
+  mounted() {
+    // 由于有多个 floor 组件，所以需要在其父组件进行触发，防止重复触发事件
+    this.$store.dispatch("getFloorList");
   },
 };
 </script>

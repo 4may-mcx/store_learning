@@ -3,7 +3,7 @@
     <div class="sortList clearfix">
       <div class="center">
         <!--banner轮播-->
-        <div class="swiper-container" id="mySwiper">
+        <div class="swiper-container" ref="mySwiper">
           <div class="swiper-wrapper">
             <!-- 轮播图本身 -->
             <div
@@ -107,12 +107,12 @@ export default {
     }),
   },
   mounted() {
-    this.$store.dispatch("bannerList");
+    this.$store.dispatch("getBannerList");
   },
   watch: {
     bannerList(newValue, oldValue) {
       this.$nextTick(() => {
-        var mySwiper = new Swiper(".swiper-container", {
+        var mySwiper = new Swiper(this.$refs.mySwiper, {
           loop: true, // 循环模式选项
           // 如果需要分页器
           pagination: {

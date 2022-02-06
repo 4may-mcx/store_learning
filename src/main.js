@@ -6,8 +6,6 @@ import store from '@/store'
 
 import TypeNav from "@/components/TypeNav"
 
-
-
 Vue.config.productionTip = false
 // 注册全局组件
 Vue.component(TypeNav.name, TypeNav)
