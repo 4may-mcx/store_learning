@@ -71,18 +71,30 @@ export default {
       //   `/search/${this.keyword}?k=${this.keyword.toUpperCase()}`
       // );
       // 传参方式2：对象
-      this.$router.push({
-        // 如果使用 params 传参则配置的路径必须是 name, 使用 path会报错
-        name: "search",
-        params:{
-          // 这里的 key 名称要和 router 中的占位符一一对应
-          // 如果没有设置 undefined，则传递空串会出现错误
-          keyword: this.keyword || undefined
-        },
-        query:{
-          k: this.keyword || 'search'
-        }
-      })
+      // this.$router.push({
+      //   // 如果使用 params 传参则配置的路径必须是 name, 使用 path会报错
+      //   name: "search",
+      //   params:{
+      //     // 这里的 key 名称要和 router 中的占位符一一对应
+      //     // 如果没有设置 undefined，则传递空串会出现错误
+      //     keyword: this.keyword || undefined
+      //   },
+      //   query:{
+      //     k: this.keyword || 'search'
+      //   }
+      // })
+
+      // 正式：参数合并
+      // 代表的是如果有 query参数也带过去
+      if (this.$route.query) {
+        console.log(this.$route.query);
+        let location = {
+          name: "search",
+          params: { keyword: this.keyword || undefined },
+        };
+        location.query = this.$route.query;
+        this.$router.push(location);
+      }
     },
   },
 };

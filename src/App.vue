@@ -15,7 +15,11 @@ export default {
   components: {
     Header,
     Footer
-  }
+  },
+  mounted () {
+    // 调入一次可以使用多次
+    this.$store.dispatch("categoryList");
+  },
 }
 </script>
   

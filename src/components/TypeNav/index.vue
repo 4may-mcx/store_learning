@@ -79,7 +79,8 @@ export default {
     };
   },
   mounted() {
-    this.$store.dispatch("categoryList");
+    // 下面这个调用接口的函数放到 App.vue 中以防反复调用
+    // this.$store.dispatch("categoryList");
     if (this.$route.path != "/home") {
         this.show = false;
       }
@@ -112,7 +113,10 @@ export default {
         } else {
           query.category3id = category3id;
         }
-
+        // 如果路由跳转的时候，带有params参数，捎带传递过去
+        if(this.$route.params){
+          location.params = this.$route.params;
+        }
         location.query = query;
         this.$router.push(location);
       }
