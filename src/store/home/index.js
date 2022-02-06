@@ -7,7 +7,7 @@ const state = {
 }
 const mutations = {
   CATEGORYLIST(state, categoryList){
-    state.categoryList = categoryList;
+    state.categoryList = categoryList.slice(0, 16);
   }
 }
 const actions = {

@@ -9,15 +9,19 @@
               class="item"
               v-for="(c1, index) in categoryList"
               :key="c1.categoryId"
-              :class="{cur:curIndex==index}"
+              :class="{ cur: curIndex == index }"
             >
               <h3 @mouseenter="changeIndex(index)">
                 <a href="">{{ c1.categoryName }}</a>
               </h3>
-              <div class="item-list clearfix">
+              <!-- 二、三级页面 -->
+              <div
+                class="item-list clearfix"
+                :style="{ display: curIndex == index ? 'block' : 'none' }"
+              >
                 <div
                   class="subitem"
-                  v-for="(c2) in c1.categoryChild"
+                  v-for="c2 in c1.categoryChild"
                   :key="c2.categoryId"
                 >
                   <dl class="fore">
@@ -25,10 +29,7 @@
                       <a href="">{{ c2.categoryName }}</a>
                     </dt>
                     <dd>
-                      <em
-                        v-for="(c3) in c2.categoryChild"
-                        :key="c3.categoryId"
-                      >
+                      <em v-for="c3 in c2.categoryChild" :key="c3.categoryId">
                         <a href="">{{ c3.categoryName }}</a>
                       </em>
                     </dd>
@@ -60,8 +61,8 @@ export default {
   name: "TypeNav",
   data() {
     return {
-      curIndex: -1
-    }
+      curIndex: -1,
+    };
   },
   mounted() {
     this.$store.dispatch("categoryList");
@@ -77,9 +78,9 @@ export default {
     changeIndex(index) {
       this.curIndex = index;
     },
-    leaveIndex(){
+    leaveIndex() {
       this.curIndex = -1;
-    }
+    },
   },
 };
 </script>
@@ -193,14 +194,8 @@ export default {
               }
             }
           }
-
-          &:hover {
-            .item-list {
-              display: block;
-            }
-          }
         }
-        .cur{
+        .cur {
           background-color: skyblue;
         }
       }
