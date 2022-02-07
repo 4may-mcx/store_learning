@@ -20,6 +20,11 @@ import "swiper/css/swiper.css"
 
 new Vue({
   render: h => h(App),
+  beforeCreate() {
+    // beforeCreate 这个时候的组件还没有获取数据，是一个干净的新建出来的 new 的 Vue实例，因此 this 是干净的。
+    // vm上的 $on,$off,$emit等方法都是总线需要的
+    Vue.prototype.$bus = this;
+  },
   router,
   store
 }).$mount('#app')

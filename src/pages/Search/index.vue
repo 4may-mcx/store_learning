@@ -15,6 +15,10 @@
               {{ searchParams.categoryName
               }}<i @click="removeCategoryName">×</i>
             </li>
+            <li class="with-x" v-if="searchParams.keyword">
+              {{ searchParams.keyword
+              }}<i @click="removeKeyword">×</i>
+            </li>
           </ul>
         </div>
 
@@ -168,10 +172,18 @@ export default {
     removeCategoryName() {
       this.searchParams.categoryName = undefined;
       this.initCategoryId();
-      if (this.$route.params) {
-        // 原本的 params 不能丢
-        this.$router.push({ name: "search", params: this.$route.params });
-      }
+      // 由于 $route 正在被 watch ，所以每次路由变化都会自动获取数据。不需要重新在这里获取数据
+      // this.getData();
+      // 原本的 params 不能丢
+      this.$router.push({ name: "search", params: this.$route.params });
+    },
+    removeKeyword() {
+      // 给服务器带的参数 searchParams 的 keyword 置空
+      this.searchParams.keyword = undefined;
+      // 通知兄弟组件 Header 清除关键字
+      this.$bus.$emit('clearKeyword');
+      // 进行路由跳转
+      this.$router.push({name:"search", query:this.$route.query});
     },
   },
   computed: {
