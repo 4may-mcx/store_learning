@@ -3,7 +3,7 @@
     <TypeNav />
     <div class="main">
       <div class="py-container">
-        <!--bread 面包屑-->
+        <!--bread 面包屑  带有 x 的-->
         <div class="bread">
           <ul class="fl sui-breadcrumb">
             <li>
@@ -11,10 +11,10 @@
             </li>
           </ul>
           <ul class="fl sui-tag">
-            <li class="with-x">手机</li>
-            <li class="with-x">iphone<i>×</i></li>
-            <li class="with-x">华为<i>×</i></li>
-            <li class="with-x">OPPO<i>×</i></li>
+            <li class="with-x" v-if="searchParams.categoryName">
+              {{ searchParams.categoryName
+              }}<i @click="removeCategoryName">×</i>
+            </li>
           </ul>
         </div>
 
@@ -51,7 +51,7 @@
           <!-- 商品列表 -->
           <div class="goods-list">
             <ul class="yui3-g">
-              <li class="yui3-u-1-5" v-for="(good) in goodsList" :key="good.id">
+              <li class="yui3-u-1-5" v-for="good in goodsList" :key="good.id">
                 <div class="list-wrap">
                   <div class="p-img">
                     <a href="item.html" target="_blank"
@@ -61,16 +61,13 @@
                   <div class="price">
                     <strong>
                       <em>¥ </em>
-                      <i>{{good.price}}</i>
+                      <i>{{ good.price }}</i>
                     </strong>
                   </div>
                   <div class="attr">
-                    <a
-                      target="_blank"
-                      href="item.html"
-                      :title="good.title"
-                      >{{good.title}}</a
-                    >
+                    <a target="_blank" href="item.html" :title="good.title">{{
+                      good.title
+                    }}</a>
                   </div>
                   <div class="commit">
                     <i class="command">已有<span>2000</span>人评价</i>
@@ -88,7 +85,6 @@
                   </div>
                 </div>
               </li>
-              
             </ul>
           </div>
           <!-- 分页器 -->
@@ -129,7 +125,7 @@
 
 <script>
 import SearchSelector from "./SearchSelector/SearchSelector";
-import {mapGetters} from "vuex"
+import { mapGetters } from "vuex";
 
 export default {
   name: "Search",
@@ -158,29 +154,40 @@ export default {
         //品牌
         trademark: "",
       },
-    }
+    };
   },
   methods: {
     getData() {
       this.$store.dispatch("getSearchInfo", this.searchParams);
-    }
+    },
+    initCategoryId() {
+      this.searchParams.category1Id = undefined;
+      this.searchParams.category2Id = undefined;
+      this.searchParams.category3Id = undefined;
+    },
+    removeCategoryName() {
+      this.searchParams.categoryName = undefined;
+      this.initCategoryId();
+      if (this.$route.params) {
+        // 原本的 params 不能丢
+        this.$router.push({ name: "search", params: this.$route.params });
+      }
+    },
   },
   computed: {
-    ...mapGetters(['goodsList'])
+    ...mapGetters(["goodsList"]),
   },
   watch: {
     $route(newValue, oldValue) {
       // 每一次请求前，都把相应的 三级分类 id 置空。让它接受下一次对应的 id
-      this.searchParams.category1Id = '';
-      this.searchParams.category2Id = '';
-      this.searchParams.category3Id = '';
+      this.initCategoryId();
       // 发起请求前整理参数
       Object.assign(this.searchParams, this.$route.query, this.$route.params);
       // 发送请求
       this.getData();
-    }
+    },
   },
-  beforeMount () {
+  beforeMount() {
     // 合并对象，$route.query：typeNav中选择的数据；$route.params：搜索输入框输入的数据
     // 要在渲染前合并对象，选择好需要的商品
     Object.assign(this.searchParams, this.$route.query, this.$route.params);
@@ -188,7 +195,6 @@ export default {
   mounted() {
     this.getData();
   },
-  
 };
 </script>
 
