@@ -11,19 +11,26 @@
             </li>
           </ul>
           <ul class="fl sui-tag">
+            <!-- 分类的面包屑 -->
             <li class="with-x" v-if="searchParams.categoryName">
               {{ searchParams.categoryName
               }}<i @click="removeCategoryName">×</i>
             </li>
+            <!-- 关键字的面包屑 -->
             <li class="with-x" v-if="searchParams.keyword">
-              {{ searchParams.keyword
-              }}<i @click="removeKeyword">×</i>
+              {{ searchParams.keyword }}<i @click="removeKeyword">×</i>
+            </li>
+            <!-- 品牌的面包屑 -->
+            <li class="with-x" v-if="searchParams.trademark">
+              {{ searchParams.trademark.split(":")[1]
+              }}<i @click="removeTrademark">×</i>
             </li>
           </ul>
         </div>
 
         <!--selector-->
-        <SearchSelector />
+        <!-- 自定义事件，@绑定的时间名（即子组件中 $emit中填的参数）：事件触发后进行的回调（写在父组件 methods 中的）方法 -->
+        <SearchSelector @trademarkInfo="trademarkInfo" />
 
         <!--details-->
         <div class="details clearfix">
@@ -181,9 +188,19 @@ export default {
       // 给服务器带的参数 searchParams 的 keyword 置空
       this.searchParams.keyword = undefined;
       // 通知兄弟组件 Header 清除关键字
-      this.$bus.$emit('clearKeyword');
+      this.$bus.$emit("clearKeyword");
       // 进行路由跳转
-      this.$router.push({name:"search", query:this.$route.query});
+      this.$router.push({ name: "search", query: this.$route.query });
+    },
+    removeTrademark() {
+      this.searchParams.trademark = undefined;
+      this.getData();
+    },
+
+    // 自定义事件回调
+    trademarkInfo(trademark) {
+      this.searchParams.trademark = `${trademark.tmId}:${trademark.tmName}`;
+      this.getData();
     },
   },
   computed: {

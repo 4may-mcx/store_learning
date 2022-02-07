@@ -87,7 +87,6 @@ export default {
       // 正式：参数合并
       // 代表的是如果有 query参数也带过去
       if (this.$route.query) {
-        console.log(this.$route.query);
         let location = {
           name: "search",
           params: { keyword: this.keyword || undefined },
