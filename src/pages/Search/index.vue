@@ -25,12 +25,17 @@
               {{ searchParams.trademark.split(":")[1]
               }}<i @click="removeTrademark">×</i>
             </li>
+            <!-- attr的面包屑 -->
+            <li class="with-x" v-for="(attr, index) in searchParams.props" :key="index">
+              {{ attr.split(":")[1]
+              }}<i @click="removeAttr(index)">×</i>
+            </li>
           </ul>
         </div>
 
         <!--selector-->
         <!-- 自定义事件，@绑定的时间名（即子组件中 $emit中填的参数）：事件触发后进行的回调（写在父组件 methods 中的）方法 -->
-        <SearchSelector @trademarkInfo="trademarkInfo" />
+        <SearchSelector @trademarkInfo="trademarkInfo" @attrInfo="attrInfo" />
 
         <!--details-->
         <div class="details clearfix">
@@ -196,11 +201,25 @@ export default {
       this.searchParams.trademark = undefined;
       this.getData();
     },
+    removeAttr(index){
+      this.searchParams.props.splice(index, 1);
+      this.getData();
+    },
 
     // 自定义事件回调
     trademarkInfo(trademark) {
       this.searchParams.trademark = `${trademark.tmId}:${trademark.tmName}`;
       this.getData();
+    },
+    attrInfo(attr, attrValue) {
+      // ["属性ID：属性值：属性名"]
+      let props = `${attr.attrId}:${attrValue}:${attr.attrName}`;
+      // 数组去重
+      if (this.searchParams.props.indexOf(props) === -1) {
+        this.searchParams.props.push(props);
+      }
+      this.getData();
+      console.log(this.searchParams.props);
     },
   },
   computed: {
