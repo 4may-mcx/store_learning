@@ -24,7 +24,7 @@ export const reqFloorList = () => {
     })
 }
 // 这个接口至少要传一个空对象才能正常返回
-export const reqGetSearchInfo = (params) => {
+export const reqGetSearchInfo = (params = {}) => {
     return requests({
         url: '/list',
         method: "POST",
