@@ -73,9 +73,8 @@
                             ? 'icon-direction-down'
                             : 'icon-direction-up'
                         "
-                      ></span>
-                    </span></a
-                  >
+                      ></span> </span
+                  ></a>
                 </li>
               </ul>
             </div>
@@ -120,35 +119,13 @@
             </ul>
           </div>
           <!-- 分页器 -->
-          <div class="fr page">
-            <div class="sui-pagination clearfix">
-              <ul>
-                <li class="prev disabled">
-                  <a href="#">«上一页</a>
-                </li>
-                <li class="active">
-                  <a href="#">1</a>
-                </li>
-                <li>
-                  <a href="#">2</a>
-                </li>
-                <li>
-                  <a href="#">3</a>
-                </li>
-                <li>
-                  <a href="#">4</a>
-                </li>
-                <li>
-                  <a href="#">5</a>
-                </li>
-                <li class="dotted"><span>...</span></li>
-                <li class="next">
-                  <a href="#">下一页»</a>
-                </li>
-              </ul>
-              <div><span>共10页&nbsp;</span></div>
-            </div>
-          </div>
+          <Pagination
+            :pageNo="searchParams.pageNo"
+            :pageSize="searchParams.pageSize"
+            :total="total"
+            :continues="5"
+            @getPage="getPage"
+          ></Pagination>
         </div>
       </div>
     </div>
@@ -157,7 +134,7 @@
 
 <script>
 import SearchSelector from "./SearchSelector/SearchSelector";
-import { mapGetters } from "vuex";
+import { mapGetters, mapState } from "vuex";
 
 export default {
   name: "Search",
@@ -180,7 +157,7 @@ export default {
         //第几页
         pageNo: 1,
         //每一页展示条数
-        pageSize: 15,
+        pageSize: 10,
         //平台属性的操作
         props: [],
         //品牌
@@ -235,7 +212,7 @@ export default {
         this.searchParams.props.push(props);
       }
       this.getData();
-      console.log(this.searchParams.props);
+      // console.log(this.searchParams.props);
     },
 
     // 商品排序
@@ -255,9 +232,17 @@ export default {
       this.searchParams.order = order.join(":");
       this.getData();
     },
+    // 分页器换页
+    getPage(val) {
+      this.searchParams.pageNo = val;
+      this.getData();
+    },
   },
   computed: {
     ...mapGetters(["goodsList"]),
+    ...mapState({
+      total: (state) => state.search.searchList.total,
+    }),
     isOrder() {
       // 返回一个函数才可以被调用
       return function (val) {

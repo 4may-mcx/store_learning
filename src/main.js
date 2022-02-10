@@ -6,11 +6,13 @@ import store from '@/store'
 
 import TypeNav from "@/components/TypeNav"
 import Carsouel from "@/components/Carsouel"
+import Pagination from "@/components/Pagination"
 
 Vue.config.productionTip = false;
 // 注册全局组件
 Vue.component(TypeNav.name, TypeNav);
 Vue.component(Carsouel.name, Carsouel);
+Vue.component(Pagination.name, Pagination);
 
 // 引入 mockServe.js 并调用一次 （获取 mock 数据）
 import "@/mock/mockServe.js"
