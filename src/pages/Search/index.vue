@@ -26,9 +26,12 @@
               }}<i @click="removeTrademark">×</i>
             </li>
             <!-- attr的面包屑 -->
-            <li class="with-x" v-for="(attr, index) in searchParams.props" :key="index">
-              {{ attr.split(":")[1]
-              }}<i @click="removeAttr(index)">×</i>
+            <li
+              class="with-x"
+              v-for="(attr, index) in searchParams.props"
+              :key="index"
+            >
+              {{ attr.split(":")[1] }}<i @click="removeAttr(index)">×</i>
             </li>
           </ul>
         </div>
@@ -40,26 +43,39 @@
         <!--details-->
         <div class="details clearfix">
           <div class="sui-navbar">
-            <div class="navbar-inner filter">
-              <!-- 商品排序方式 -->
+            <div class="navbar-inner filter iconfont">
+              <!-- 商品排序方式  ⬆  ⬇-->
               <ul class="sui-nav">
-                <li class="active">
-                  <a href="#">综合</a>
+                <!-- 有 active 类就会有背景颜色 -->
+                <li :class="{ active: isOrder(1) }" @click="changOrder(1)">
+                  <a
+                    >综合
+                    <span v-show="isOrder(1)">
+                      <!-- <span v-show="this.order[1] == 'desc'"> ⬆</span>
+                       <span v-show="this.order[1] == 'asc'">⬇</span> -->
+                      <span
+                        :class="
+                          this.order[1] == 'desc'
+                            ? 'icon-direction-down'
+                            : 'icon-direction-up'
+                        "
+                      ></span>
+                    </span>
+                  </a>
                 </li>
-                <li>
-                  <a href="#">销量</a>
-                </li>
-                <li>
-                  <a href="#">新品</a>
-                </li>
-                <li>
-                  <a href="#">评价</a>
-                </li>
-                <li>
-                  <a href="#">价格⬆</a>
-                </li>
-                <li>
-                  <a href="#">价格⬇</a>
+                <li :class="{ active: isOrder(2) }" @click="changOrder(2)">
+                  <a
+                    >价格
+                    <span v-show="isOrder(2)">
+                      <span
+                        :class="
+                          this.order[1] == 'desc'
+                            ? 'icon-direction-down'
+                            : 'icon-direction-up'
+                        "
+                      ></span>
+                    </span></a
+                  >
                 </li>
               </ul>
             </div>
@@ -201,7 +217,7 @@ export default {
       this.searchParams.trademark = undefined;
       this.getData();
     },
-    removeAttr(index){
+    removeAttr(index) {
       this.searchParams.props.splice(index, 1);
       this.getData();
     },
@@ -221,9 +237,38 @@ export default {
       this.getData();
       console.log(this.searchParams.props);
     },
+
+    // 商品排序
+    changOrder(index) {
+      // let order = this.searchParams.order.split(":");
+      let order = this.order;
+      if (order[0] == index) {
+        if (order[1] == "desc") {
+          order[1] = "asc";
+        } else {
+          order[1] = "desc";
+        }
+      } else {
+        order[0] = index;
+        order[1] = "desc";
+      }
+      this.searchParams.order = order.join(":");
+      this.getData();
+    },
   },
   computed: {
     ...mapGetters(["goodsList"]),
+    isOrder() {
+      // 返回一个函数才可以被调用
+      return function (val) {
+        // 判断 order 中是否含有输出值
+        let res = this.searchParams.order.indexOf(val) != -1;
+        return res;
+      };
+    },
+    order() {
+      return this.searchParams.order.split(":");
+    },
   },
   watch: {
     $route(newValue, oldValue) {
