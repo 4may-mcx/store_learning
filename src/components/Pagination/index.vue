@@ -1,5 +1,6 @@
 <template>
   <div class="pagination">
+    <!-- 上一页 & 1 & ... -->
     <button
       :disabled="startNumAndEndNum.start == 1"
       @click="$emit('getPage', pageNo - 1)"
@@ -15,6 +16,7 @@
     </button>
     <button v-if="startNumAndEndNum.start - 1 > 1">···</button>
 
+    <!-- 批量生产部分 -->
     <button
       :class="{ active: (page + offset) == pageNo }"
       v-for="(page, index) in (startNumAndEndNum.end - offset)"
@@ -24,6 +26,7 @@
       {{ page + offset}}
     </button>
 
+    <!-- ... & 最后一页 & 下一页 -->
     <button v-if="startNumAndEndNum.end + 1 < totalPage">···</button>
     <button
       :class="{ active: totalPage == pageNo }"
