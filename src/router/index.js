@@ -1,12 +1,9 @@
 import Vue from 'vue';
 import VueRouter from 'vue-router';
 
-Vue.use(VueRouter);
+import routes from "./routes"
 
-import Home from "@/pages/Home"
-import Login from "@/pages/Login"
-import Register from "@/pages/Register"
-import Search from "@/pages/Search"
+Vue.use(VueRouter);
 
 // 重写 push & replace
 let originPush = VueRouter.prototype.push;
@@ -30,41 +27,9 @@ VueRouter.prototype.replace = function (location, resolve, reject) {
 export default new VueRouter({
   base: '/',
   mode: 'history',
-  routes: [
-    {
-      path: "/home",
-      component: Home,
-      meta: {
-        FooterShow: true
-      }
-    },
-    {
-      path: "/login",
-      component: Login,
-      meta: {
-        FooterShow: false
-      }
-    },
-    {
-      path: "/register",
-      component: Register,
-      meta: {
-        FooterShow: false
-      }
-    },
-    {
-      // 用 params 传参一定要设置占位符！！！
-      // 占位符后面加 ？ 说明params参数可传可不传。不加的话不传参会导致 URL 出现错误
-      path: "/search/:keyword?",
-      name: "search",
-      component: Search,
-      meta: {
-        FooterShow: true
-      }
-    },
-    {
-      path: "*",
-      redirect: "/home"
-    },
-  ]
+  routes,
+  scrollBehavior(to, from, savedPosition){
+    // 返回的这个 y，代表路由跳转后滚动条的垂直位置
+    return { y: 0}
+  }
 });
