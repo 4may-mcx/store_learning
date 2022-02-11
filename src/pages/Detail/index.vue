@@ -356,7 +356,11 @@
     components: {
       ImageList,
       Zoom
-    }
+    },
+
+    mounted () {
+      this.$store.dispatch('getGoodInfo', this.$route.params.skuid);
+    },
   }
 </script>
 
