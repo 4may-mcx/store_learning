@@ -5,6 +5,15 @@ export default {
     goodInfo: {}
   },
   getters: {
+    categoryView(state){
+      return state.goodInfo.categoryView || {};
+    },
+    skuInfo(state){
+      return state.goodInfo.skuInfo || {};
+    },
+    spuSaleAttrList(state){
+      return state.goodInfo.spuSaleAttrList || [];
+    }
   },
   mutations: {
     GOODINFO(state, goodInfo) {
