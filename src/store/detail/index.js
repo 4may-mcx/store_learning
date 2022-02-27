@@ -1,8 +1,11 @@
 import { reqGoodsInfo, reqAddOrUpdateShopCart } from "@/api"
+import { getUUID } from "@/utils/uuid_token";
 
 export default {
   state: {
-    goodInfo: {}
+    goodInfo: {},
+    // 游客临时身份
+    uuid_token: getUUID()
   },
   getters: {
     categoryView(state) {
