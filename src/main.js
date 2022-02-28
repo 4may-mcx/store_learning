@@ -21,6 +21,15 @@ import * as API from '@/api'
 //引入 swiper 样式
 import "swiper/css/swiper.css"
 
+// 懒加载
+import VueLazyload from "vue-lazyload";
+import atm from "@/assets/R.gif"
+
+Vue.use(VueLazyload, {
+  // 懒加载默认的图片
+  loading: atm
+})
+
 new Vue({
   render: h => h(App),
   beforeCreate() {

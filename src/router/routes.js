@@ -1,4 +1,3 @@
-import Home from "@/pages/Home"
 import Login from "@/pages/Login"
 import Register from "@/pages/Register"
 import Search from "@/pages/Search"
@@ -14,6 +13,15 @@ export default [
     component: Pay,
     meta: {
       FooterShow: true
+    },
+    beforeEnter:(to, from, next) => {
+      if(from.path == '/trade'){
+        // 从 trade 来的才能放行
+        next();
+      } else {
+        // 其它组件来的，保留在当前
+        next(from.path);
+      }
     }
   },
   {
@@ -21,6 +29,13 @@ export default [
     component: Trade,
     meta: {
       FooterShow: true
+    },
+    beforeEnter:(to, from, next) => {
+      if(from.path == '/shopcart'){
+        next();
+      } else {
+        next(from.path);
+      }
     }
   },
   {
@@ -40,7 +55,8 @@ export default [
   },
   {
     path: "/home",
-    component: Home,
+    // 路由懒加载
+    component: () => import('@/pages/Home'),
     meta: {
       FooterShow: true
     }
