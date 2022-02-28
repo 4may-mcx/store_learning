@@ -17,6 +17,7 @@
               type="checkbox"
               name="chk_list"
               :checked="cart.isChecked == 1"
+              @click="updateChecked(cart.skuId, !cart.isChecked)"
             />
           </li>
           <li class="cart-list-con2">
@@ -52,7 +53,7 @@
             <span class="sum">{{ cart.skuNum * cart.skuPrice }}</span>
           </li>
           <li class="cart-list-con7">
-            <a href="#none" class="sindelet">删除</a>
+            <a @click="deleteCarById(cart.skuId)" class="sindelet">删除</a>
             <br />
             <a href="#none">移到收藏</a>
           </li>
@@ -85,6 +86,7 @@
 
 <script>
 import { mapGetters } from "vuex";
+import throttle from "lodash/throttle";
 export default {
   name: "ShopCart",
   mounted() {
@@ -94,11 +96,11 @@ export default {
     getData() {
       this.$store.dispatch("getCartList");
     },
-    async handler(type, disNum, cart) {
+    // 处理购物车商品数量:  节流，=在一定时间内只能操作一次
+    handler: throttle(async function (type, disNum, cart) {
       // type：区分三个元素
       // diNum：变化量
       // cart：哪一个产品，身上有id
-      console.log("派发action，服务器修改了个数", type, disNum, cart);
       switch (type) {
         case "plus":
           disNum = 1;
@@ -124,6 +126,25 @@ export default {
       } catch (error) {
         console.log(error);
       }
+    }, 500),
+    // 删除购物车商品
+    async deleteCarById(skuId) {
+      try {
+        await this.$store.dispatch("deleteCartListBySkuId", skuId);
+        this.getData();
+      } catch (error) {
+        alert(error.message);
+      }
+    },
+
+    async updateChecked(skuId, isChecked) {
+      isChecked = isChecked == true ? 1 : 0;
+      try {
+        await this.$store.dispatch("updateCheckedById", { skuId, isChecked });
+        this.getData();
+      } catch (error) {
+        alert(error.message);
+      }
     },
   },
   computed: {
@@ -135,7 +156,7 @@ export default {
     totalPrice() {
       let sum = 0;
       this.cartInfoList.forEach((item) => {
-        sum += item.skuNum * item.skuPrice;
+        sum += item.skuNum * item.skuPrice * item.isChecked;
       });
       return sum;
     },
