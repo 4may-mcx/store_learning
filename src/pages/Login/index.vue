@@ -94,7 +94,9 @@ export default {
           (await this.$store.dispatch("userLogin", { phone, password }));
         // 跳转到 home 首页
         // await this.$store.dispatch("getUserInfo");
-        this.$router.push('/home');
+        // 如果url中包含重定向的路由，则跳转到指定路由，否则默认为 home
+        let toPath = this.$route.query.redirect || "/home";
+        this.$router.push(toPath);
       } catch (error) {
         alert(error.message);
       }
