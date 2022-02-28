@@ -10,7 +10,6 @@
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 
-
 export default {
   name: "App",
   components: {
@@ -20,6 +19,8 @@ export default {
   mounted() {
     // 调入一次可以使用多次
     this.$store.dispatch("getCategoryList");
+    // 获取用户信息
+    this.$store.dispatch("getUserInfo");
   },
 };
 </script>

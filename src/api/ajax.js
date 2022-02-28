@@ -23,6 +23,10 @@ request.interceptors.request.use((config) => {
     // 请求头添加一个字段（userTempId）
     config.headers.userTempId = store.state.detail.uuid_token;
   }
+  if (store.state.user.token) {
+    // 请求头添加一个token，有些数据请求需要 token
+    config.headers.token = store.state.user.token;
+  }
   return config;
 })
 

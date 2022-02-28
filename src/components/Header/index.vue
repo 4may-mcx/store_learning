@@ -7,12 +7,19 @@
         <div class="container">
           <div class="loginList">
             <p>尚品汇欢迎您！</p>
-            <p>
+
+            <!-- 没有用户名，未登录 -->
+            <p v-if="!userName">
               <span>请</span>
               <router-link to="/login">登录</router-link>
               <router-link to="/register" class="register"
                 >免费注册</router-link
               >
+            </p>
+            <!-- 登陆了 -->
+            <p v-else>
+              <a>{{ userName }}</a>
+              <a class="register" @click="userLogout">退出登录</a>
             </p>
           </div>
           <div class="typeList">
@@ -95,12 +102,26 @@ export default {
         this.$router.push(location);
       }
     },
-    clearKeyword(){
-      this.keyword = '';
-    }
+    clearKeyword() {
+      this.keyword = "";
+    },
+    async userLogout() {
+      try {
+        await this.$store.dispatch("userLogout");
+        this.$router.replace("/home");
+        alert("用户已退出");
+      } catch (error) {
+        alert(error.message);
+      }
+    },
   },
-  mounted () {
-    this.$bus.$on('clearKeyword', this.clearKeyword);
+  computed: {
+    userName() {
+      return this.$store.state.user.userInfo.name;
+    },
+  },
+  mounted() {
+    this.$bus.$on("clearKeyword", this.clearKeyword);
   },
 };
 </script>

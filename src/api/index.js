@@ -49,3 +49,19 @@ export const reqDeleteCartById = (skuId) => requests({ url: `/cart/deleteCart/${
 
 // 更新商品被选中状态
 export const reqUpdateCheckedById = (skuId, isChecked) => requests({ url: `/cart/checkCart/${skuId}/${isChecked}`, method: 'get' });
+
+// 注册获取验证码
+export const reqGetCode = (phone) => requests({ url: `/user/passport/sendCode/${phone}`, method: "get" })
+
+// 用户注册接口
+export const reqUserRegister = (data) => requests({ url: `/user/passport/register`, data, method: 'post' });
+
+// 用户登录接口
+export const reqUserLogin = (data) => requests({ url: `/user/passport/login`, data, method: "post" });
+
+
+// 获取用户信息（需要带着用户的token向服务器要用户信息）
+export const reqUserInfo = () => requests({ url: `/user/passport/auth/getUserInfo`, method: 'get' });
+
+// 用户退出登录
+export const reqLogout = () => requests({ url: `/user/passport/logout`, method: 'get' });

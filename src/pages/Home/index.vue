@@ -38,6 +38,8 @@ export default {
   mounted() {
     // 由于有多个 floor 组件，所以需要在其父组件进行触发，防止重复触发事件
     this.$store.dispatch("getFloorList");
+    // 获取用户信息
+    this.$store.dispatch("getUserInfo");
   },
 };
 </script>
