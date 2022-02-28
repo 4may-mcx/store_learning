@@ -27,15 +27,26 @@
             <span class="price">{{ cart.skuPrice }}.00</span>
           </li>
           <li class="cart-list-con5">
-            <a href="javascript:void(0)" class="mins">-</a>
+            <a
+              href="javascript:void(0)"
+              class="mins"
+              @click="handler('mins', -1, cart)"
+              >-</a
+            >
             <input
               autocomplete="off"
               type="text"
               :value="cart.skuNum"
               minnum="1"
               class="itxt"
+              @change="handler('change', $event.target.value * 1, cart)"
             />
-            <a href="javascript:void(0)" class="plus">+</a>
+            <a
+              href="javascript:void(0)"
+              class="plus"
+              @click="handler('plus', 1, cart)"
+              >+</a
+            >
           </li>
           <li class="cart-list-con6">
             <span class="sum">{{ cart.skuNum * cart.skuPrice }}</span>
@@ -50,7 +61,7 @@
     </div>
     <div class="cart-tool">
       <div class="select-all">
-        <input class="chooseAll" type="checkbox" :checked="isAllCheck"/>
+        <input class="chooseAll" type="checkbox" :checked="isAllCheck" />
         <span>全选</span>
       </div>
       <div class="option">
@@ -62,7 +73,7 @@
         <div class="chosed">已选择 <span>0</span>件商品</div>
         <div class="sumprice">
           <em>总价（不含运费） ：</em>
-          <i class="summoney">{{totalPrice}}</i>
+          <i class="summoney">{{ totalPrice }}</i>
         </div>
         <div class="sumbtn">
           <a class="sum-btn" href="###" target="_blank">结算</a>
@@ -83,6 +94,37 @@ export default {
     getData() {
       this.$store.dispatch("getCartList");
     },
+    async handler(type, disNum, cart) {
+      // type：区分三个元素
+      // diNum：变化量
+      // cart：哪一个产品，身上有id
+      console.log("派发action，服务器修改了个数", type, disNum, cart);
+      switch (type) {
+        case "plus":
+          disNum = 1;
+          break;
+        case "mins":
+          disNum = cart.skuNum > 1 ? -1 : 0;
+          break;
+        case "change":
+          // 如果输入的最终量非法
+          if (isNaN(disNum) || disNum < 1) {
+            disNum = 0;
+          } else {
+            disNum = parseInt(disNum) - cart.skuNum;
+          }
+          break;
+      }
+      try {
+        await this.$store.dispatch("addOrUpdateShopCart", {
+          skuId: cart.skuId,
+          skuNum: disNum,
+        });
+        this.getData();
+      } catch (error) {
+        console.log(error);
+      }
+    },
   },
   computed: {
     ...mapGetters(["cartList"]),
@@ -97,9 +139,9 @@ export default {
       });
       return sum;
     },
-    isAllCheck(){
-      return this.cartInfoList.every(item => item.isChecked == 1);
-    }
+    isAllCheck() {
+      return this.cartInfoList.every((item) => item.isChecked == 1);
+    },
   },
 };
 </script>
