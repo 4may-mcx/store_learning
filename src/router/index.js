@@ -2,6 +2,7 @@ import Vue from 'vue';
 import VueRouter from 'vue-router';
 
 import routes from "./routes"
+import store from "@/store"
 
 Vue.use(VueRouter);
 
@@ -24,12 +25,50 @@ VueRouter.prototype.replace = function (location, resolve, reject) {
   }
 }
 
-export default new VueRouter({
+let router = new VueRouter({
   base: '/',
   mode: 'history',
   routes,
-  scrollBehavior(to, from, savedPosition){
+  scrollBehavior(to, from, savedPosition) {
     // 返回的这个 y，代表路由跳转后滚动条的垂直位置
-    return { y: 0}
+    return { y: 0 }
   }
 });
+
+router.beforeEach(async (to, from, next) => {
+  // to: Route: 即将要进入的目标 路由对象
+  // from: Route: 当前导航正要离开的路由
+  // next: Function: 一定要调用该方法来 resolve 这个钩子。执行效果依赖 next 方法的调用参数。
+  let token = store.state.user.token;
+  let name = store.state.user.userInfo.name;
+  // 用户登陆了才会有token
+  // 用户已经登陆了
+  if (token) {
+    if (to.path == '/login' || to.path == '/register') {
+      next('/home');
+    } else {
+      // 登陆了，但是去的不是login || register
+      // 如果已经有了用户名
+      if (name) {
+        next();
+      } else {
+        // 没有用户信息，派发action让仓库储存用户信息再跳转
+        try {
+          // 获取用户信息
+          await store.dispatch('getUserInfo');
+          next();
+        } catch (error) {
+          // token失效，获取不到用户信息，重新登录
+          await store.dispatch('userLogout');
+          next('/login');
+        }
+      }
+    }
+  }
+  else {
+    next();
+  }
+})
+
+
+export default router;
